@@ -11,14 +11,33 @@ import java.util.List;
 public class Kata4 {
 
     public static void main(String[] args) {
+        Control control = new Control();
         String fileName = args.length > 0 ? args[0] : "email.txt";
-        MailListReader mailListReader = new MailListReader();
-        List<Mail> mailList = mailListReader.read(fileName);
+        control.input(fileName);
+        control.process();
+        control.output();
+        control.execute();
+    }
 
-        MailHistogramBuilder mailHistogramBuilder = new MailHistogramBuilder();
-        Histogram<String> histogram = mailHistogramBuilder.build(mailList);
+    static class Control {
+        private List<Mail> mailList;
+        private Histogram<String> histogram;
+        private HistogramDisplay histogramDisplay;
 
-        HistogramDisplay histoDisplay = new HistogramDisplay("Histograma de Dominios", histogram);
-        histoDisplay.execute();
+        public void input(String fileName) {
+            mailList = new MailListReader().read(fileName);
+        }
+
+        public void process() {
+            histogram = new MailHistogramBuilder().build(mailList);
+        }
+
+        public void output() {
+            histogramDisplay = new HistogramDisplay("Histograma de Dominios", histogram);
+        }
+
+        public void execute() {
+            histogramDisplay.execute();
+        }
     }
 }
